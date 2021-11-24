@@ -44,18 +44,20 @@ App = {
       App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
     }
     web3 = new Web3(App.web3Provider);
+    App.displayWallet();
 
     return App.initContract();
   },
 
+  displayWallet: function() {
+    // Display user wallet address
+    console.log("User wallet  address:")
+    console.log(App.web3Provider.selectedAddress);
+    $('#wallet-address').text(App.web3Provider.selectedAddress);
+  },
+
   initContract: function() {
     $.getJSON('Adoption.json', function(data) {
-      // CHANGE: Get wallet address
-      console.log("Test")
-      console.log(App.web3Provider.selectedAddress);
-      $('.wallet-address').text(App.web3Provider.selectedAddress);
-
-
       // Get the necessary contract artifact file and instantiate it with @truffle/contract
       var AdoptionArtifact = data;
       App.contracts.Adoption = TruffleContract(AdoptionArtifact);
