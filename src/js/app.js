@@ -74,6 +74,7 @@ App = {
 
   bindEvents: function() {
     $(document).on('click', '.btn-adopt', App.handleAdopt);
+    $(document).on('click', '#new-artwork-btn', App.handleCreateArtwork);
   },
 
   markAdopted: function() {
@@ -120,6 +121,36 @@ App = {
         return adoptionInstance.adopt(petId, {from: account});
       }).then(function(result) {
         return App.markAdopted();
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  },
+
+  handleCreateArtwork: function(event) {
+    event.preventDefault();
+
+    var url = $('#url').val();
+    var price = parseInt($('#price').val());
+    var author = $('#author').val();
+
+    var adoptionInstance;
+
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      var account = accounts[0];
+
+      App.contracts.Adoption.deployed().then(function(instance) {
+        adoptionInstance = instance;
+
+        // Execute adopt as a transaction by sending account
+        return adoptionInstance.create(url, price, author, {from: account});
+      }).then(function(result) {
+        return
+        // return App.markAdopted();
       }).catch(function(err) {
         console.log(err.message);
       });
