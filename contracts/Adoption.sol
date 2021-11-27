@@ -6,6 +6,7 @@ contract Adoption {
         string url;
         bool onSale;
         uint price;
+        address owner;
   }
 
   Artwork[] public artworks;
@@ -13,20 +14,22 @@ contract Adoption {
 
   address[16] public adopters;
 
-  function create(string memory url) public{
-      artworks.push(Artwork(nextId, url, false, 0));
+  function create(string memory url) public {
+      artworks.push(Artwork(nextId, url, false, 0, msg.sender));
       nextId++;
   }
 
-  function getArtwork(uint id) public view returns (uint, string memory, bool, uint){
+  function getArtwork(uint id) public view returns (uint, string memory, bool, uint, address){
     for(uint i = 0; i < artworks.length; i++){
       if(artworks[i].id == id){
-        return (artworks[i].id, artworks[i].url, artworks[i].onSale, artworks[i].price);
+        return (artworks[i].id, artworks[i].url, artworks[i].onSale, artworks[i].price, artworks[i].owner);
       }
     }
   }
 
   function sellArtwork(uint id, uint price) public {
+    require(artworks[id].owner == msg.sender);
+    
     for(uint i = 0; i < artworks.length; i++){
       if(artworks[i].id == id){
         artworks[i].onSale = true;
@@ -37,6 +40,7 @@ contract Adoption {
   }
 
   function destroy(uint id) public{
+      require(artworks[id].owner == msg.sender);
       delete artworks[id];
   }
 
