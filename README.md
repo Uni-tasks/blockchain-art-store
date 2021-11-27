@@ -1,3 +1,11 @@
+# Functionality
+
+- Anyone can see the list of all the artworks
+- User can create an artwork
+- User can see the list of their artworks
+- User can list their artwork for sale
+- User can delete their artwork
+
 # References
 
 ### Truffle suite tutorial
