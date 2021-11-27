@@ -65,6 +65,7 @@ App = {
       // Set the provider for our contract
       App.contracts.Adoption.setProvider(App.web3Provider);
 
+      App.logArtworks();
       // Use our contract to retrieve and mark the adopted pets
       return App.markAdopted();
     });
@@ -82,9 +83,12 @@ App = {
 
     App.contracts.Adoption.deployed().then(function(instance) {
       adoptionInstance = instance;
+      console.log(adoptionInstance);
 
       return adoptionInstance.getAdopters.call();
     }).then(function(adopters) {
+      console.log('adopters')
+      console.log(adopters)
       for (i = 0; i < adopters.length; i++) {
         if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
           // CHANGE: If pet is adopted by the user, display: Your pet
@@ -95,6 +99,30 @@ App = {
           }
         }
       }
+    }).catch(function(err) {
+      console.log(err.message);
+    });
+  },
+
+  logArtworks: function() {
+    var adoptionInstance;
+
+    App.contracts.Adoption.deployed().then(function(instance) {
+      adoptionInstance = instance;
+
+      return adoptionInstance.getTotalArtworks.call();
+    }).then(function(artworks) {
+      count = artworks.c[0]
+
+      try {
+        for (i = 0; i < count; i++) {
+          adoptionInstance.getArtwork.call(i).then(function(artwork) {
+            console.log(artwork);
+          });
+      }} catch (error) {
+        console.log(error);
+      }
+
     }).catch(function(err) {
       console.log(err.message);
     });
@@ -131,8 +159,6 @@ App = {
     event.preventDefault();
 
     var url = $('#url').val();
-    var price = parseInt($('#price').val());
-    var author = $('#author').val();
 
     var adoptionInstance;
 
@@ -146,11 +172,10 @@ App = {
       App.contracts.Adoption.deployed().then(function(instance) {
         adoptionInstance = instance;
 
-        // Execute adopt as a transaction by sending account
-        return adoptionInstance.create(url, price, author, {from: account});
+        return adoptionInstance.create(url, {from: account});
       }).then(function(result) {
-        return
-        // return App.markAdopted();
+        $('#url').val('');
+        location.reload();
       }).catch(function(err) {
         console.log(err.message);
       });

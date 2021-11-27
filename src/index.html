@@ -38,36 +38,31 @@
       </ul>
 
       <div class="tab-content" id="myTabContent">
+        <!-- LISTING PAGE -->
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
           <div id="petsRow" class="row">
             <!-- PETS LOAD HERE -->
           </div>
         </div>
 
+        <!-- CREATE ARTWORK FORM -->
         <div class="tab-pane fade" id="create" role="tabpanel" aria-labelledby="create-tab">
-          <div class="row">
-            <form id="artwork-form">
-    
-              <div class="form-group">
-                <label for="url">Artwork url</label>
-                <input type="text" class="form-control" id="url" name="url">
-              </div>
-    
-              <div class="form-group">
-                <label for="price">Price</label>
-                <input type="text" class="form-control" id="price" name="price">
-              </div>
-    
-              <div class="form-group">
-                <label for="author">Author</label>
-                <input type="text" class="form-control" id="author" name="author">
-              </div>
-    
-              <button class="btn btn-primary" id="new-artwork-btn">Submit</button>
-              </form>
+          <div class="card col-6 mx-auto my-4">
+            <div class="card-header">
+              Create a new artwork
+            </div>
+
+            <div class="card-body text-center">
+                <div class="input-group">
+                  <input type="text" class="form-control" id="url" name="url" placeholder="https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg">
+                </div>
+      
+                <button class="btn btn-primary mt-3" id="new-artwork-btn">Create</button>
+            </div>
           </div>
         </div>
         
+        <!-- PROFILE PAGE -->
         <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
           <!-- CHANGE: Displaying user wallet address -->
           <h1 class="text-center">Your wallet address:</h1>

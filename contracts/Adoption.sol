@@ -40,6 +40,10 @@ contract Adoption {
       delete artworks[id];
   }
 
+  function getTotalArtworks() public view returns (uint256 length){
+      return artworks.length;
+   }
+
   // Adopting a pet
   function adopt(uint petId) public returns (uint) {
     require(petId >= 0 && petId <= 15);

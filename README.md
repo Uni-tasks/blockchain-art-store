@@ -19,3 +19,7 @@ https://www.bitdegree.org/learn/solidity-types
 ### Bootstrap 5
 
 https://getbootstrap.com/docs/5.0/components/buttons/
+
+### More
+https://github.com/rob-Hitchens/UnorderedKeySet/tree/master/contracts
+https://github.com/buddies2705/Solidity-Tutorial
