@@ -1,45 +1,56 @@
 pragma solidity ^0.5.0;
 
 contract Adoption {
+  struct Artwork{
+        uint id;
+        string url;
+        bool onSale;
+        uint price;
+  }
 
-struct art{
-      address owner;
-      string url;
-      int256 price;
-      string author;
-}
+  Artwork[] public artworks;
+  uint public nextId;
 
-art[] public artworks;
-uint256 public totalArtworks;
+  address[16] public adopters;
 
-constructor() public {
-    totalArtworks = 0;
-}
+  function create(string memory url) public{
+      artworks.push(Artwork(nextId, url, false, 0));
+      nextId++;
+  }
 
-address[16] public adopters;
+  function getArtwork(uint id) public view returns (uint, string memory, bool, uint){
+    for(uint i = 0; i < artworks.length; i++){
+      if(artworks[i].id == id){
+        return (artworks[i].id, artworks[i].url, artworks[i].onSale, artworks[i].price);
+      }
+    }
+  }
 
-function create(string memory url, int256 price, string memory author) public returns (uint256 totalCountries){
-    address owner = msg.sender;
-    art memory newArtwork = art(owner, url, price, author);
-    artworks.push(newArtwork);
-    totalArtworks++;
-    //emit event
-    // emit CountryEvent (countryName, leader, population);
-    return totalArtworks;
-}
+  function sellArtwork(uint id, uint price) public {
+    for(uint i = 0; i < artworks.length; i++){
+      if(artworks[i].id == id){
+        artworks[i].onSale = true;
+        artworks[i].price = price;
+        return;
+      }
+    }
+  }
 
-// Adopting a pet
-function adopt(uint petId) public returns (uint) {
-  require(petId >= 0 && petId <= 15);
+  function destroy(uint id) public{
+      delete artworks[id];
+  }
 
-  adopters[petId] = msg.sender;
+  // Adopting a pet
+  function adopt(uint petId) public returns (uint) {
+    require(petId >= 0 && petId <= 15);
 
-  return petId;
-}
+    adopters[petId] = msg.sender;
 
-// Retrieving the adopters
-function getAdopters() public view returns (address[16] memory) {
-  return adopters;
-}
+    return petId;
+  }
 
+  // Retrieving the adopters
+  function getAdopters() public view returns (address[16] memory) {
+    return adopters;
+  }
 }
