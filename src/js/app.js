@@ -46,45 +46,17 @@ App = {
       // Set the provider for our contract
       App.contracts.Adoption.setProvider(App.web3Provider);
 
-      App.loadArtworks();
-      // Use our contract to retrieve and mark the adopted pets
-      return App.markAdopted();
+      return App.loadArtworks();
     });
 
     return App.bindEvents();
   },
 
   bindEvents: function() {
-    $(document).on('click', '.btn-adopt', App.handleAdopt);
     $(document).on('click', '#new-artwork-btn', App.handleCreateArtwork);
     $(document).on('click', '.sale-btn', App.handleSellArtwork);
     $(document).on('click', '.delete-btn', App.handleDeleteArtwork);
-  },
-
-  markAdopted: function() {
-    var adoptionInstance;
-
-    App.contracts.Adoption.deployed().then(function(instance) {
-      adoptionInstance = instance;
-      console.log(adoptionInstance);
-
-      return adoptionInstance.getAdopters.call();
-    }).then(function(adopters) {
-      console.log('adopters')
-      console.log(adopters)
-      for (i = 0; i < adopters.length; i++) {
-        if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-          // CHANGE: If pet is adopted by the user, display: Your pet
-          if (adopters[i] === App.web3Provider.selectedAddress) {
-            $('.panel-pet').eq(i).find('button').text('Your pet').attr('disabled', true);
-          } else {
-            $('.panel-pet').eq(i).find('button').text('This pet is adopted already').attr('disabled', true);
-          }
-        }
-      }
-    }).catch(function(err) {
-      console.log(err.message);
-    });
+    $(document).on('click', '.purchase-btn', App.handlePurchaseArtwork);
   },
 
   loadArtworks: function() {
@@ -102,17 +74,6 @@ App = {
       var artworkTemplate = $('#artworkTemplate');
       var userArtworkTemplate = $('#userArtworkTemplate');
 
-      // for (i = 0; i < data.length; i ++) {
-      //   petTemplate.find('.panel-title').text(data[i].name);
-      //   petTemplate.find('img').attr('src', data[i].picture);
-      //   petTemplate.find('.pet-breed').text(data[i].breed);
-      //   petTemplate.find('.pet-age').text(data[i].age);
-      //   petTemplate.find('.pet-location').text(data[i].location);
-      //   petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
-
-      //   artworksRow.append(petTemplate.html());
-      // }
-
       for (i = 0; i < count; i++) {
         adoptionInstance.getArtwork.call(i).then(function(artwork) {
           console.log(artwork)
@@ -127,6 +88,8 @@ App = {
           if(url !== '') {
             artworkTemplate.find('img').attr('src', url);
             artworkTemplate.find('.artwork-name').text(name);
+            artworkTemplate.find('.card-body').attr('data-id', id);
+            artworkTemplate.find('.card-body').attr('data-price', price);
 
             if (isForSale) {
               artworkTemplate.find('.artwork-price').text(price + ' ETH');
@@ -154,33 +117,6 @@ App = {
 
     }).catch(function(err) {
       console.log(err.message);
-    });
-  },
-
-  handleAdopt: function(event) {
-    event.preventDefault();
-
-    var petId = parseInt($(event.target).data('id'));
-
-    var adoptionInstance;
-
-    web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-
-      var account = accounts[0];
-
-      App.contracts.Adoption.deployed().then(function(instance) {
-        adoptionInstance = instance;
-
-        // Execute adopt as a transaction by sending account
-        return adoptionInstance.adopt(petId, {from: account});
-      }).then(function(result) {
-        return App.markAdopted();
-      }).catch(function(err) {
-        console.log(err.message);
-      });
     });
   },
 
@@ -269,8 +205,36 @@ App = {
         console.log(err.message);
       });
     });
-  }
+  },
 
+  handlePurchaseArtwork: function(event) {
+    event.preventDefault();
+
+    var artworkId = parseInt($(event.target.parentElement).data('id'));
+    var price = parseInt($(event.target.parentElement).data('price'));
+    console.log(artworkId, price);
+
+    // var adoptionInstance;
+
+    // web3.eth.getAccounts(function(error, accounts) {
+    //   if (error) {
+    //     console.log(error);
+    //   }
+
+    //   var account = accounts[0];
+
+    //   App.contracts.Adoption.deployed().then(function(instance) {
+    //     adoptionInstance = instance;
+
+    //     return adoptionInstance.destroy(artworkId, {from: account});
+    //   }).then(function(result) {
+    //     $('#url').val('');
+    //     location.reload();
+    //   }).catch(function(err) {
+    //     console.log(err.message);
+    //   });
+    // });
+  }
 };
 
 $(function() {
