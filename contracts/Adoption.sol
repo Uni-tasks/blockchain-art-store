@@ -3,6 +3,7 @@ pragma solidity ^0.5.0;
 contract Adoption {
   struct Artwork{
         uint id;
+        string name;
         string url;
         bool onSale;
         uint price;
@@ -14,15 +15,15 @@ contract Adoption {
 
   address[16] public adopters;
 
-  function create(string memory url) public {
-      artworks.push(Artwork(nextId, url, false, 0, msg.sender));
+  function create(string memory name, string memory url) public {
+      artworks.push(Artwork(nextId, name, url, false, 0, msg.sender));
       nextId++;
   }
 
-  function getArtwork(uint id) public view returns (uint, string memory, bool, uint, address){
+  function getArtwork(uint id) public view returns (uint, string memory, string memory, bool, uint, address){
     for(uint i = 0; i < artworks.length; i++){
       if(artworks[i].id == id){
-        return (artworks[i].id, artworks[i].url, artworks[i].onSale, artworks[i].price, artworks[i].owner);
+        return (artworks[i].id, artworks[i].name, artworks[i].url, artworks[i].onSale, artworks[i].price, artworks[i].owner);
       }
     }
   }
