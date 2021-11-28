@@ -129,7 +129,7 @@ App = {
             artworkTemplate.find('.artwork-name').text(name);
 
             if (isForSale) {
-              artworkTemplate.find('.artwork-price').text(price + '$');
+              artworkTemplate.find('.artwork-price').text(price + ' ETH');
               const text = ownerAddress === userAddress ? 'Your artwork' : 'Purchase';
               artworkTemplate.find('.purchase-btn').text(text).attr('disabled', ownerAddress === userAddress ? true : false);;
             } else {
