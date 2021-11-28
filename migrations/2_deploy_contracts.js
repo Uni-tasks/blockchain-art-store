@@ -1,5 +1,5 @@
-var Adoption = artifacts.require("Adoption");
+var ArtworkStore = artifacts.require("ArtworkStore");
 
 module.exports = function(deployer) {
-  deployer.deploy(Adoption);
+  deployer.deploy(ArtworkStore);
 };

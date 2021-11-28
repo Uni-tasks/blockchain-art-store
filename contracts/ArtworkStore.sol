@@ -1,6 +1,6 @@
 pragma solidity ^0.5.0;
 
-contract Adoption {
+contract ArtworkStore {
   struct Artwork{
         uint id;
         string name;
