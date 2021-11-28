@@ -7,7 +7,7 @@ contract ArtworkStore {
         string url;
         bool onSale;
         uint price;
-        address owner;
+        address payable owner;
   }
 
   Artwork[] public artworks;
@@ -39,8 +39,12 @@ contract ArtworkStore {
   }
 
   function purchaseArtwork(uint id) public payable {
-    require(artworks[id].price <= msg.value);
+    require(artworks[id].price * 1 ether <= msg.value);
     require(artworks[id].onSale == true);
+
+    // transfer ethereum
+    // DOESN'T WORK
+    address(artworks[id].owner).transfer(msg.value);
 
     // transfer ownership
     for(uint i = 0; i < artworks.length; i++){
@@ -51,9 +55,6 @@ contract ArtworkStore {
         return;
       }
     }
-
-    // transfer ethereum
-    address(artworks[id].owner).transfer(msg.value);
   }
 
   function destroy(uint id) public{

@@ -60,6 +60,7 @@ App = {
   },
 
   loadArtworks: function() {
+    console.log("Loading artworks...");
     var adoptionInstance;
 
     App.contracts.Adoption.deployed().then(function(instance) {
@@ -108,13 +109,13 @@ App = {
               userArtworksRow.append(userArtworkTemplate.html());
             }
             
-            artworksRow.append(artworkTemplate.html()); 
+            artworksRow.append(artworkTemplate.html());
           }
         }).catch(function(err) {
           console.log(err.message);
         });
       }
-
+      console.log("Artworks loaded successfully.");
     }).catch(function(err) {
       console.log(err.message);
     });
@@ -125,6 +126,7 @@ App = {
 
     var name = $('#name').val();
     var url = $('#url').val();
+    console.log("Creating artwork...", name, url);
 
     var adoptionInstance;
 
@@ -138,9 +140,12 @@ App = {
 
       App.contracts.Adoption.deployed().then(function(instance) {
         adoptionInstance = instance;
+        console.log("here")
 
         return adoptionInstance.create(name, url, {from: account});
       }).then(function(result) {
+        console.log(result);
+        console.log("Artwork created successfully.");
         $('#name').val('');
         $('#url').val('');
         location.reload();
@@ -157,6 +162,8 @@ App = {
     var price = parseInt(parentElement.find('input').val());
     var artworkId = parseInt(parentElement.data('id'));
 
+    console.log("Listing artwork for sale...", artworkId, price);
+
     var adoptionInstance;
 
     web3.eth.getAccounts(function(error, accounts) {
@@ -172,6 +179,7 @@ App = {
         return adoptionInstance.sellArtwork(artworkId, price, {from: account});
       }).then(function(result) {
         $('#url').val('');
+        console.log("Artwork listed for sale successfully.");
         location.reload();
       }).catch(function(err) {
         console.log(err.message);
@@ -183,7 +191,7 @@ App = {
     event.preventDefault();
 
     var artworkId = parseInt($(event.target.parentElement).data('id'));
-    console.log(artworkId);
+    console.log("Deleting artwork...", artworkId);
 
     var adoptionInstance;
 
@@ -200,6 +208,7 @@ App = {
         return adoptionInstance.destroy(artworkId, {from: account});
       }).then(function(result) {
         $('#url').val('');
+        console.log("Artwork deleted successfully.", artworkId);
         location.reload();
       }).catch(function(err) {
         console.log(err.message);
@@ -212,28 +221,29 @@ App = {
 
     var artworkId = parseInt($(event.target.parentElement).data('id'));
     var price = parseInt($(event.target.parentElement).data('price'));
-    console.log(artworkId, price);
+    console.log("Purchasing artwork...", artworkId, price);
 
-    // var adoptionInstance;
+    var adoptionInstance;
 
-    // web3.eth.getAccounts(function(error, accounts) {
-    //   if (error) {
-    //     console.log(error);
-    //   }
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
 
-    //   var account = accounts[0];
+      var account = accounts[0];
 
-    //   App.contracts.Adoption.deployed().then(function(instance) {
-    //     adoptionInstance = instance;
+      App.contracts.Adoption.deployed().then(function(instance) {
+        adoptionInstance = instance;
 
-    //     return adoptionInstance.destroy(artworkId, {from: account});
-    //   }).then(function(result) {
-    //     $('#url').val('');
-    //     location.reload();
-    //   }).catch(function(err) {
-    //     console.log(err.message);
-    //   });
-    // });
+        return adoptionInstance.purchaseArtwork(artworkId, {from: account, value: web3.toWei(price, "ether")});
+      }).then(function(result) {
+        console.log(result)
+        console.log("Artwork purchased succefully.", artworkId, price);
+        location.reload();
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
   }
 };
 
