@@ -38,6 +38,24 @@ contract ArtworkStore {
     }
   }
 
+  function purchaseArtwork(uint id) public payable {
+    require(artworks[id].price <= msg.value);
+    require(artworks[id].onSale == true);
+
+    // transfer ownership
+    for(uint i = 0; i < artworks.length; i++){
+      if (artworks[i].id == id) {
+        artworks[i].owner = msg.sender;
+        artworks[i].onSale = false;
+        artworks[i].price = 0;
+        return;
+      }
+    }
+
+    // transfer ethereum
+    address(artworks[id].owner).transfer(msg.value);
+  }
+
   function destroy(uint id) public{
       require(artworks[id].owner == msg.sender);
       delete artworks[id];
