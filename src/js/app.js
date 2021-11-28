@@ -132,15 +132,18 @@ App = {
 
       for (i = 0; i < count; i++) {
         adoptionInstance.getArtwork.call(i).then(function(artwork) {
+          console.log(artwork)
           const id = artwork[0].c[0];
-          const url = artwork[1];
-          const isForSale = artwork[2];
-          const price = artwork[3].c[0];
-          const ownerAddress = artwork[4];
+          const name = artwork[1];
+          const url = artwork[2];
+          const isForSale = artwork[3];
+          const price = artwork[4].c[0];
+          const ownerAddress = artwork[5];
           const userAddress = App.web3Provider.selectedAddress;
 
           if(url !== '') {
             artworkTemplate.find('img').attr('src', url);
+            artworkTemplate.find('.artwork-name').text(name);
 
             if (isForSale) {
               artworkTemplate.find('.artwork-price').text(price + '$');
@@ -153,6 +156,7 @@ App = {
 
             if (ownerAddress === userAddress) {
               userArtworkTemplate.find('img').attr('src', url);
+              userArtworkTemplate.find('.user-artwork-name').text(name);
               userArtworkTemplate.find('.sale-btn').attr('data-id', id);
               userArtworkTemplate.find('.card-body').attr('data-id', id);
               userArtworksRow.append(userArtworkTemplate.html());
@@ -200,6 +204,7 @@ App = {
   handleCreateArtwork: function(event) {
     event.preventDefault();
 
+    var name = $('#name').val();
     var url = $('#url').val();
 
     var adoptionInstance;
@@ -215,8 +220,9 @@ App = {
       App.contracts.Adoption.deployed().then(function(instance) {
         adoptionInstance = instance;
 
-        return adoptionInstance.create(url, {from: account});
+        return adoptionInstance.create(name, url, {from: account});
       }).then(function(result) {
+        $('#name').val('');
         $('#url').val('');
         location.reload();
       }).catch(function(err) {
