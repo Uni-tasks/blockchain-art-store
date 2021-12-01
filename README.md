@@ -1,3 +1,20 @@
+# Setup
+
+## Genache
+
+1. Download & install Genache https://www.trufflesuite.com/ganache
+2. Stant Genache > New workspace > Add project > Select truffle-config.js file
+
+## Truffle
+
+3. Open project folder > Run `truffle migrate`
+4. Run `npm run dev`
+
+## MetaMask
+
+5. Install MetaMask extension https://metamask.io/
+6. Open MetaMask > Unlock account > Connect to network > Connect to Ganache
+
 # Functionality
 
 - Anyone can see the list of all the artworks
@@ -5,6 +22,7 @@
 - User can see the list of their artworks
 - User can list their artwork for sale
 - User can delete their artwork
+- User can buy an artwork from another user
 
 # References
 
