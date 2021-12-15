@@ -1,3 +1,7 @@
+# TODO:
+
+- After sending ETH to contract, transfer the ETH to previous owner.
+
 # Setup
 
 ## Genache
