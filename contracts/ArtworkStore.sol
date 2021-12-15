@@ -42,9 +42,8 @@ contract ArtworkStore {
     require(artworks[id].price * 1 ether <= msg.value);
     require(artworks[id].onSale == true);
 
-    // transfer ethereum
-    // DOESN'T WORK
-    address(artworks[id].owner).transfer(msg.value);
+    // transfer ethereum to the seller
+    artworks[id].owner.transfer(msg.value);
 
     // transfer ownership
     for(uint i = 0; i < artworks.length; i++){

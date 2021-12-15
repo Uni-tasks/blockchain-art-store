@@ -3,6 +3,7 @@ App = {
   contracts: {},
 
   init: async function() {
+    console.log("App initialized...");
     return await App.initWeb3();
   },
 

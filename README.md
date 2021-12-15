@@ -1,6 +1,7 @@
 # TODO:
 
-- After sending ETH to contract, transfer the ETH to previous owner.
+- ~~After sending ETH to contract, transfer the ETH to previous owner.~~
+- ~~Fix bug, where every transaction is requested twice in Metamask.~~ (Changed nothing, but doesn't happen anymore)
 
 # Setup
 
